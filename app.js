@@ -6,6 +6,7 @@ import { handleTestCommand } from "./commands/test.js";
 import { handleHadarCommand } from "./commands/hadar.js";
 import { handlePokedexCommand } from "./Commands/pokedex.js";
 import { handleCatchCommand } from "./commands/catch.js";
+import { handleCollectionCommand } from "./commands/collection.js";
 
 // Create an express app
 const app = express();
@@ -53,6 +54,10 @@ app.post("/interactions", async function (req, res) {
     if (name === "catch") {
       // console.log(req.body.member);
       return handleCatchCommand(req, res);
+    }
+
+    if (name === "collection") {
+      return handleCollectionCommand(req, res);
     }
   }
 });

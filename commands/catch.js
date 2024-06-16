@@ -14,7 +14,7 @@ export async function handleCatchCommand(req, res) {
 
   // Continuously fetch a valid Pokemon until one is found
   do {
-    pokemonId = Math.floor(Math.random() * 5000) + 1;
+    pokemonId = Math.floor(Math.random() * 1026);
     pokemonDetails = await getPokemonInfoByID(pokemonId);
 
     // Add a check to ensure pokemonDetails is not undefined and has the expected properties

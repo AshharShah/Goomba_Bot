@@ -53,11 +53,19 @@ const CATCH_POKEMON = {
   type: 1,
 };
 
+// This command is used to catch pokemons
+const COLLECTION_POKEMON = {
+  name: "collection",
+  description: "View all the current Pokemons you have caught.",
+  type: 1,
+};
+
 const ALL_COMMANDS = [
   TEST_COMMAND,
   CHALLENGE_COMMAND,
   POKEMON_INFO_COMMAND,
   CATCH_POKEMON,
+  COLLECTION_POKEMON,
 ];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
