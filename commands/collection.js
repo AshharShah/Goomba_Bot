@@ -64,7 +64,7 @@ export async function handleCollectionCommand(req, res) {
       embeds: [
         {
           color: 0xffff00,
-          title: userNickName + ",s Pokémon Collection",
+          title: userNickName + "'s Pokémon Collection",
           fields: fields,
           footer: {
             text: "Last Caught Pokemon: " + fields[0].name,
