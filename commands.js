@@ -46,6 +46,18 @@ const POKEMON_INFO_COMMAND = {
   ],
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, POKEMON_INFO_COMMAND];
+// This command is used to catch pokemons
+const CATCH_POKEMON = {
+  name: "catch",
+  description: "Used To Catch A Pokemon",
+  type: 1,
+};
+
+const ALL_COMMANDS = [
+  TEST_COMMAND,
+  CHALLENGE_COMMAND,
+  POKEMON_INFO_COMMAND,
+  CATCH_POKEMON,
+];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

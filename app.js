@@ -1,19 +1,11 @@
 import "dotenv/config";
 import express from "express";
-import {
-  InteractionType,
-  InteractionResponseType,
-  InteractionResponseFlags,
-  MessageComponentTypes,
-  ButtonStyleTypes,
-} from "discord-interactions";
-import {
-  VerifyDiscordRequest,
-  getRandomEmoji,
-  DiscordRequest,
-  getPokemonInfo,
-} from "./utils.js";
-import { getShuffledOptions, getResult } from "./game.js";
+import { InteractionType, InteractionResponseType } from "discord-interactions";
+import { VerifyDiscordRequest } from "./utils.js";
+import { handleTestCommand } from "./commands/test.js";
+import { handleHadarCommand } from "./commands/hadar.js";
+import { handlePokedexCommand } from "./Commands/pokedex.js";
+import { handleCatchCommand } from "./commands/catch.js";
 
 // Create an express app
 const app = express();
@@ -30,7 +22,7 @@ const activeGames = {};
  */
 app.post("/interactions", async function (req, res) {
   // Interaction type and data
-  const { type, id, data } = req.body;
+  const { type, data } = req.body;
 
   /**
    * Handle verification requests
@@ -47,80 +39,20 @@ app.post("/interactions", async function (req, res) {
     const { name } = data;
     // "test" command
     if (name === "test") {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: "hello world " + getRandomEmoji(),
-        },
-      });
+      return handleTestCommand(res);
     }
 
     if (name === "hadar") {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: "My Name Is Hadar, I am Big GAY.",
-          embeds: [
-            {
-              title: "BELOW IS A BIG GAY!",
-              image: {
-                url: "https://instagram.flhe3-1.fna.fbcdn.net/v/t51.2885-19/330832507_2373425629501897_5727183638491697557_n.jpg?_nc_ht=instagram.flhe3-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=X3Q3PhSjAJMQ7kNvgFZbTiU&edm=APHcPcMBAAAA&ccb=7-5&oh=00_AYC8zSEehxZQJgvXvp3pTBdZCMBU33bgg08P_XykFzURuw&oe=6673C703&_nc_sid=cf751b",
-              },
-            },
-          ],
-        },
-      });
+      return handleHadarCommand(res);
     }
 
     if (name === "pokedex") {
-      const pokemonName = data.options[0].value;
-      const pokemonDetails = getPokemonInfo(pokemonName);
+      return handlePokedexCommand(res, data);
+    }
 
-      if (pokemonDetails.name === "Error") {
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `Pokemon: ${pokemonName} was not found in the Pokedex!`,
-          },
-        });
-      } else {
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            embeds: [
-              {
-                color: 0x0099ff,
-                title:
-                  pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1),
-                fields: [
-                  {
-                    name: "Height",
-                    value: pokemonDetails.height.toString(),
-                    inline: true,
-                  },
-                  {
-                    name: "Weight",
-                    value: pokemonDetails.weight.toString(),
-                    inline: true,
-                  },
-                  {
-                    name: "Base Experience",
-                    value: pokemonDetails.base_experience.toString(),
-                    inline: true,
-                  },
-                ],
-                image: {
-                  url: pokemonDetails.sprites?.animated || "default-image-url",
-                },
-              },
-            ],
-          },
-        });
-      }
+    if (name === "catch") {
+      // console.log(req.body.member);
+      return handleCatchCommand(req, res);
     }
   }
 });

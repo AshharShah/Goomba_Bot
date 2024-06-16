@@ -90,3 +90,13 @@ export function getPokemonInfo(pokemonName) {
     return { error: `${pokemonName} was not found in the Pokedex.` };
   }
 }
+
+export function getPokemonInfoByID(id) {
+  try {
+    const pokemonInfo = pokedex.pokemon(id);
+    return pokemonInfo;
+  } catch (error) {
+    console.error(`Error: ${pokemonName} was not found in the Pokedex.`);
+    return { error: `${pokemonName} was not found in the Pokedex.` };
+  }
+}
