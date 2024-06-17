@@ -8,6 +8,7 @@ import { handlePokedexCommand } from "./Commands/pokedex.js";
 import { handleCatchCommand } from "./commands/catch.js";
 import { handleCollectionCommand } from "./commands/collection.js";
 import { checkRegister, handleUnregistered } from "./utils/checkRegistered.js";
+import { handleRegisterCommand } from "./commands/register.js";
 
 // Create an express app
 const app = express();
@@ -15,9 +16,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
-
-// Store for in-progress games. In production, you'd want to use a DB
-const activeGames = {};
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -39,6 +37,11 @@ app.post("/interactions", async function (req, res) {
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
+
+    // handle the register command, to register a user into the database
+    if (name === "register") {
+      return handleRegisterCommand(req, res);
+    }
 
     // check if the user is registered in the Pokemon Database
     let isRegistered = await checkRegister(req);
