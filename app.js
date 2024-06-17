@@ -7,6 +7,7 @@ import { handleHadarCommand } from "./commands/hadar.js";
 import { handlePokedexCommand } from "./Commands/pokedex.js";
 import { handleCatchCommand } from "./commands/catch.js";
 import { handleCollectionCommand } from "./commands/collection.js";
+import { checkRegister, handleUnregistered } from "./utils/checkRegistered.js";
 
 // Create an express app
 const app = express();
@@ -38,6 +39,13 @@ app.post("/interactions", async function (req, res) {
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
+
+    // check if the user is registered in the Pokemon Database
+    let isRegistered = await checkRegister(req);
+    if (isRegistered === false) {
+      return handleUnregistered(req, res);
+    }
+
     // "test" command
     if (name === "test") {
       return handleTestCommand(res);

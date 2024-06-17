@@ -5,7 +5,6 @@ import connection from "../database.js";
 export async function handleCatchCommand(req, res) {
   let pokemonId;
   let pokemonDetails;
-
   // get the nickname of the user
   const userNickName = req.body.member.nick;
 
